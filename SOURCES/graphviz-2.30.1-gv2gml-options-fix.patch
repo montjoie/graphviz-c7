@@ -1,0 +1,12 @@
+diff -up graphviz-2.30.1/cmd/tools/gv2gml.c.orig5 graphviz-2.30.1/cmd/tools/gv2gml.c
+--- graphviz-2.30.1/cmd/tools/gv2gml.c.orig5	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/cmd/tools/gv2gml.c	2013-07-11 13:54:56.661096922 +0200
+@@ -712,7 +712,7 @@ static void initargs(int argc, char **ar
+ 
+     CmdName = cmdName(argv[0]);
+     opterr = 0;
+-    while ((c = getopt(argc, argv, ":io:")) != -1) {
++    while ((c = getopt(argc, argv, "o:")) != -1) {
+ 	switch (c) {
+ 	case 'o':
+ 	    outFile = openFile(optarg, "w");

@@ -1,0 +1,45 @@
+diff -up graphviz-2.30.1/contrib/prune/prune.c.orig10 graphviz-2.30.1/contrib/prune/prune.c
+--- graphviz-2.30.1/contrib/prune/prune.c.orig10	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/contrib/prune/prune.c	2013-07-12 13:35:44.315004975 +0200
+@@ -128,7 +128,11 @@ int main(int argc, char **argv)
+ 		break;
+ 	    }
+ 	case '?':
+-	    if (isprint(optopt)) {
++	    if (optopt == '?')
++	    {
++		help_message(progname);
++		exit(EXIT_SUCCESS);
++	    } else if (isprint(optopt)) {
+ 		fprintf(stderr, "Unknown option `-%c'.\n", optopt);
+ 	    } else {
+ 		fprintf(stderr, "Unknown option character `\\x%X'.\n",
+diff -up graphviz-2.30.1/contrib/prune/prune.1.orig10 graphviz-2.30.1/contrib/prune/prune.1
+--- graphviz-2.30.1/contrib/prune/prune.1.orig10	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/contrib/prune/prune.1	2013-07-12 13:45:30.544918729 +0200
+@@ -20,6 +20,12 @@ prune \- Prune directed graphs
+ .BI \-N " attrspec"
+ ]
+ [
++.B \-v
++]
++[
++.BR \- ( h | ? )
++]
++[
+ .I files ...
+ ]
+ .SH DESCRIPTION
+@@ -54,6 +60,12 @@ pruned node.
+ .I attrspec
+ is a string of the form
+ .IR attr "=" value.
++.TP
++.B \-v
++Verbose output.
++.TP
++.BR \-h " "\-?
++Prints the usage and exits.
+ 
+ .SH EXAMPLES
+ An input graph

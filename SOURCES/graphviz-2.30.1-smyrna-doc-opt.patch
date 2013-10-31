@@ -1,0 +1,17 @@
+diff -up graphviz-2.30.1/cmd/smyrna/Makefile.am.orig2 graphviz-2.30.1/cmd/smyrna/Makefile.am
+--- graphviz-2.30.1/cmd/smyrna/Makefile.am.orig2	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/cmd/smyrna/Makefile.am	2013-07-09 13:18:30.792483754 +0200
+@@ -2,10 +2,13 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ pdfdir = $(pkgdatadir)/doc/pdf
++
++if WITH_SMYRNA
+ man = smyrna.1
+ pdf = smyrna.1.pdf
+ man_MANS = $(man)
+ pdf_DATA = $(pdf)
++endif
+ 
+ AM_CPPFLAGS = \
+ 	-DSMYRNA_PATH=\""$(pkgdatadir)/smyrna"\" \

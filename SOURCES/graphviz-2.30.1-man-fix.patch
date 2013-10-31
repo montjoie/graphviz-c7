@@ -1,0 +1,172 @@
+diff -up graphviz-2.30.1/cmd/dot/dot.1.orig2 graphviz-2.30.1/cmd/dot/dot.1
+--- graphviz-2.30.1/cmd/dot/dot.1.orig2	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/cmd/dot/dot.1	2013-07-09 14:34:22.000000000 +0200
+@@ -22,6 +22,17 @@ sfdp \- filter for drawing large undirec
+ [\fB\-P\fR]
+ [\fB\-v\fR]
+ [\fB\-V\fR]
++[\fB\-Lg\fR]
++[\fB\-LO\fR]
++[\fB\-Ln\fIiter\fR]
++[\fB\-LU\fIfuns\fR]
++[\fB\-LC\fIfover\fR]
++[\fB\-LT\fR[\fB*\fR]\fIftemp\fR]
++[\fB\-c\fR]
++[\fB\-m\fR]
++[\fB\-q\fIlevel\fR]
++[\fB\-s\fIfscale\fR]
++[\fB\-y\fR]
+ [files]
+ .br
+ \fBneato\fR
+@@ -645,6 +656,28 @@ As usual, edge layout is guided by the \
+ .PP
+ \fB\-v\fP (verbose) prints various information useful for debugging.
+ .PP
++\fB\-Lg\fP do not use grid.
++.PP
++\fB\-LO\fP use old attractive force.
++.PP
++\fB\-Ln\fP\fIiter\fP set number of iterations to \fIiter\fP.
++.PP
++\fB\-LU\fP\fIfuns\fP set unscaled factor to \fIfuns\fP.
++.PP
++\fB\-LC\fP\fIfover\fP set overlap expansion factor to \fIfover\fP.
++.PP
++\fB\-LT\fP[\fB*\fP]\fIftemp\fP set temperature factor to \fIftemp\fP.
++.PP
++\fB\-c\fP configure plugins (write $prefix/lib/graphviz/config).
++.PP
++\fB\-m\fP memory test (observe no growth with top, kill when done).
++.PP
++\fB\-q\fIlevel\fP set level of message suppression, the default is 1.
++.PP
++\fB\-s\fIfscale\fP scale input by \fIfscale\fP, the default is 72.
++.PP
++\fB\-y\fR invert y coordinate in output.
++.PP
+ \fB\-V\fP (version) prints version information and exits.
+ .PP
+ \fB\-?\fP prints the usage and exits.
+diff -up graphviz-2.30.1/cmd/dotty/dotty.1.orig3 graphviz-2.30.1/cmd/dotty/dotty.1
+--- graphviz-2.30.1/cmd/dotty/dotty.1.orig3	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/cmd/dotty/dotty.1	2013-07-11 10:47:53.050605825 +0200
+@@ -6,6 +6,10 @@ dotty \- A Customizable Graph Editor
+ [
+ .B -V
+ ] [
++.BI -lm mode
++] [
++.BI -el lev
++] [
+ .I file
+ ]
+ .SH DESCRIPTION
+@@ -48,6 +54,12 @@ window.
+ .TP
+ .B -V
+ Prints the version.
++.TP
++.BI -lm mode
++Sets the layout mode. The \fImode\fP can be \fBsync\fP or \fBasync\fP. The default is \fBasync\fP.
++.TP
++.BI -el lev
++Sets the mesage level. The \fIlev\fP can be \fB0\fP or \fB1\fP. The default is \fB0\fP.
+ .SH BUGS
+ The lefty parser does not accept anonymous graphs.
+ .SH SEE ALSO
+diff -up graphviz-2.30.1/cmd/gvmap/cluster.1.orig2 graphviz-2.30.1/cmd/gvmap/cluster.1
+--- graphviz-2.30.1/cmd/gvmap/cluster.1.orig2	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/cmd/gvmap/cluster.1	2013-07-11 10:20:14.181466011 +0200
+@@ -13,6 +13,9 @@ cluster \- find clusters in a graph and
+ .BI \-C k
+ ]
+ [
++.BI \-c k
++]
++[
+ .B \-o
+ .I outfile
+ ]
+@@ -37,6 +40,10 @@ specifies a targeted number of clusters
+ The specified number \fIk\fP is only a suggestion and may not be realisable. 
+ If \fIk == 0\fP, the default, the number of clusters that approximately optimizes the modularity is returned.
+ .TP
++.BI \-c k
++specifies clustering method.
++If \fIk == 0\fP, the default, the modularity will be used. If \fIk == 1\fP modularity quality will be used.
++.TP
+ .BI \-o outfile 
+ Specifies that output should go into the file \fIoutfile\fP. By default,
+ \fIstdout\fP is used.
+diff -up graphviz-2.30.1/cmd/tools/gc.1.orig4 graphviz-2.30.1/cmd/tools/gc.1
+--- graphviz-2.30.1/cmd/tools/gc.1.orig4	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/cmd/tools/gc.1	2013-07-11 13:36:14.847815612 +0200
+@@ -4,7 +4,7 @@ gc \- count graph components
+ .SH SYNOPSIS
+ .B gc
+ [
+-.B \-necCaDUrs?
++.B \-necCaDUrsv?
+ ]
+ [ 
+ .I files
+@@ -50,6 +50,9 @@ Only analyze directed graphs.
+ .B \-U
+ Only analyze undirected graphs.
+ .TP
++.B \-v
++Verbose output.
++.TP
+ .B \-?
+ Print usage information.
+ .LP
+diff -up graphviz-2.30.1/cmd/tools/gvgen.1.orig6 graphviz-2.30.1/cmd/tools/gvgen.1
+--- graphviz-2.30.1/cmd/tools/gvgen.1.orig6	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/cmd/tools/gvgen.1	2013-07-11 14:58:56.599050271 +0200
+@@ -4,7 +4,7 @@ gvgen \- generate graphs
+ .SH SYNOPSIS
+ .B gvgen
+ [
+-.B \-d?
++.B \-dV?
+ ]
+ [
+ .BI -i n
+@@ -198,6 +198,9 @@ Otherwise, the graph is written to stand
+ .B \-d
+ Make the generated graph directed.
+ .TP
++.B \-V
++Verbose output.
++.TP
+ .B \-?
+ Print usage information.
+ .SH "EXIT STATUS"
+diff -up graphviz-2.30.1/cmd/lneato/lneato.1.orig9 graphviz-2.30.1/cmd/lneato/lneato.1
+--- graphviz-2.30.1/cmd/lneato/lneato.1.orig9	2013-02-14 14:27:39.000000000 +0100
++++ graphviz-2.30.1/cmd/lneato/lneato.1	2013-07-12 13:24:46.817426092 +0200
+@@ -6,6 +6,10 @@ lneato \- A Customizable Graph Editor
+ [
+ .B -V
+ ] [
++.BI -lm mode
++] [
++.BI -el lev
++] [
+ .I file
+ ]
+ .SH DESCRIPTION
+@@ -48,6 +52,12 @@ window.
+ .TP
+ .B -V
+ Prints the version.
++.TP
++.BI -lm mode
++Sets the layout mode. The \fImode\fP can be \fBsync\fP or \fBasync\fP. The default is \fBasync\fP.
++.TP
++.BI -el lev
++Sets the mesage level. The \fIlev\fP can be \fB0\fP or \fB1\fP. The default is \fB0\fP.
+ .SH SEE ALSO
+ neato(1), lefty(1), dotty(1), xdot(3),
+ .br
