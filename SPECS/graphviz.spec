@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		14%{?dist}
+Release:		18%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -76,6 +76,10 @@ Patch11:		graphviz-2.30.1-man-fix.patch
 Patch12:		graphviz-2.32.0-aarch64.patch
 # Upstream bug 0002387
 Patch13:		graphviz-2.34.0-lefty-getaddrinfo.patch
+# Fix yyerror overflow (CVE-2014-0978, CVE-2014-1235)
+Patch14:		graphviz-2.30.1-CVE-2014-0978-CVE-2014-1235.patch
+# Fix chknum overflow (CVE-2014-1236)
+Patch15:		graphviz-2.30.1-CVE-2014-1236.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -285,6 +289,8 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch11 -p1 -b .man-fix
 %patch12 -p1 -b .aarch64
 %patch13 -p1 -b .lefty-getaddrinfo
+%patch14 -p1 -b .CVE-2014-0978-CVE-2014-1235
+%patch15 -p1 -b .CVE-2014-1236
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -573,6 +579,22 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.30.1-18
+- Mass rebuild 2014-01-24
+
+* Fri Jan 10 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-17
+- Prevent possible buffer overflow in yyerror()
+  Resolves: CVE-2014-1235
+- Fix possible buffer overflow problem in chkNum of scanner
+  Resolves: CVE-2014-1236
+
+* Tue Jan  7 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-16
+- Fixed overflow in yyerror
+  Resolves: CVE-2014-0978
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 2.30.1-15
+- Mass rebuild 2013-12-27
+
 * Thu Oct 31 2013 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-14
 - Removed metadata from generated PDFs
   Related: rhbz#881173
