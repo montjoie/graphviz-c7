@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		18%{?dist}
+Release:		19%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -80,6 +80,8 @@ Patch13:		graphviz-2.34.0-lefty-getaddrinfo.patch
 Patch14:		graphviz-2.30.1-CVE-2014-0978-CVE-2014-1235.patch
 # Fix chknum overflow (CVE-2014-1236)
 Patch15:		graphviz-2.30.1-CVE-2014-1236.patch
+# Fix for ppc64le
+Patch16:		graphviz-2.30.1-ppc64le-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -291,6 +293,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch13 -p1 -b .lefty-getaddrinfo
 %patch14 -p1 -b .CVE-2014-0978-CVE-2014-1235
 %patch15 -p1 -b .CVE-2014-1236
+%patch16 -p1 -b .ppc64le-fix
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -579,6 +582,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Aug 20 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-19
+- Fixed build on ppc64le and other ppc64 variants (lua bindings)
+  Resolves: rhbz#1125538
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.30.1-18
 - Mass rebuild 2014-01-24
 
