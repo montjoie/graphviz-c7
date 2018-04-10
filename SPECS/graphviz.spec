@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		19%{?dist}
+Release:		21%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -82,6 +82,8 @@ Patch14:		graphviz-2.30.1-CVE-2014-0978-CVE-2014-1235.patch
 Patch15:		graphviz-2.30.1-CVE-2014-1236.patch
 # Fix for ppc64le
 Patch16:		graphviz-2.30.1-ppc64le-fix.patch
+# Fix for OCaml 4.05
+Patch17:                graphviz-2.30.1-ocaml-int64-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -294,6 +296,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch14 -p1 -b .CVE-2014-0978-CVE-2014-1235
 %patch15 -p1 -b .CVE-2014-1236
 %patch16 -p1 -b .ppc64le-fix
+%patch17 -p1 -b .ocaml-int64-fix
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -582,6 +585,14 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Sep 16 2017 Richard W.M. Jones <rjones@redhat.com> - 2.30.1-21
+- Rebuild for OCaml 4.05.0
+  resolves: rhbz#1447982
+
+* Thu Aug 31 2017 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-20
+- Rebuilt for enabling ocaml binding on aarch64 and ppc64l
+  Resolves: rhbz#1378657
+
 * Wed Aug 20 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-19
 - Fixed build on ppc64le and other ppc64 variants (lua bindings)
   Resolves: rhbz#1125538
