@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		21%{?dist}
+Release:		22%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -83,10 +83,14 @@ Patch15:		graphviz-2.30.1-CVE-2014-1236.patch
 # Fix for ppc64le
 Patch16:		graphviz-2.30.1-ppc64le-fix.patch
 # Fix for OCaml 4.05
-Patch17:                graphviz-2.30.1-ocaml-int64-fix.patch
+Patch17:		graphviz-2.30.1-ocaml-int64-fix.patch
+# Backported from the upstream
+Patch18:		graphviz-2.30.1-hard-syntax-errors.patch
+# FTBFS fix due to ghostscript rebase which changed API
+Patch19:		graphviz-2.30.1-ghostscript-build-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
-BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
+BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, ghostscript
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python-devel
 BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel, php-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel, libgnomeui-devel
@@ -297,6 +301,8 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch15 -p1 -b .CVE-2014-1236
 %patch16 -p1 -b .ppc64le-fix
 %patch17 -p1 -b .ocaml-int64-fix
+%patch18 -p1 -b .hard-syntax-errors
+%patch19 -p1 -b .ghostscript-build-fix
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -585,6 +591,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Mar  3 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-22
+- Made syntax errors hard
+  Resolves: rhbz#1679097
+- Fixed FTBFS due to ghostscript rebase
+
 * Sat Sep 16 2017 Richard W.M. Jones <rjones@redhat.com> - 2.30.1-21
 - Rebuild for OCaml 4.05.0
   resolves: rhbz#1447982
