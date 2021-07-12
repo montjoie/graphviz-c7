@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		22%{?dist}
+Release:		23%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -88,6 +88,8 @@ Patch17:		graphviz-2.30.1-ocaml-int64-fix.patch
 Patch18:		graphviz-2.30.1-hard-syntax-errors.patch
 # FTBFS fix due to ghostscript rebase which changed API
 Patch19:		graphviz-2.30.1-ghostscript-build-fix.patch
+# CVE-2020-18032
+Patch20:		graphviz-2.30.1-CVE-2020-18032.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, ghostscript
@@ -303,6 +305,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch17 -p1 -b .ocaml-int64-fix
 %patch18 -p1 -b .hard-syntax-errors
 %patch19 -p1 -b .ghostscript-build-fix
+%patch20 -p1 -b .CVE-2020-18032
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -591,6 +594,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Jul 12 2021 Corentin Labbe <clabbe@baylibre.com> - 2.30.1-23
+- Fixed buffer overflow in lib/common/shapes.c
+  Resolves: CVE-2020-18032
+
 * Tue Mar  3 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-22
 - Made syntax errors hard
   Resolves: rhbz#1679097
